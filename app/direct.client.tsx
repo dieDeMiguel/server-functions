@@ -2,12 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import addNumbers from "./direct.actions";
 
 export default function DirectClient() {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
+  const [isPending, startTransition] = useTransition();
 
   const [state, addNumbersWrapper] = useActionState(addNumbers, 0);
 
@@ -27,11 +28,19 @@ export default function DirectClient() {
           onChange={(e) => setNum2(Number(e.target.value))}
           type="number"
         />
-        <Button onClick={async () => await addNumbersWrapper([+num1, +num2])}>
+        <Button
+          onClick={async () => {
+            startTransition(async () => {
+              await addNumbersWrapper([+num1, +num2]);
+            });
+          }}
+          disabled={isPending}
+        >
           Add
         </Button>
       </div>
       <p className="w-1/4">{state}</p>
+      {isPending && <p>Pending...</p>}
     </div>
   );
 }
