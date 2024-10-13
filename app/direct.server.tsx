@@ -1,7 +1,7 @@
 import DirectClient from "./direct.client";
 
 export default function Direct() {
-  async function addNumbers(values: number[]) {
+  async function addNumbers(prevState: number, values: number[]) {
     "use server";
     return values.reduce((acc, curr) => acc + curr, 0);
   }

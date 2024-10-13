@@ -2,16 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 
 export default function DirectClient({
   addNumbers,
 }: {
-  addNumbers: (values: number[]) => Promise<number>;
+  addNumbers: (prevState: number, values: number[]) => Promise<number>;
 }) {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
-  const [result, setResult] = useState(0);
+
+  const [state, addNumbersWrapper] = useActionState(addNumbers, 0);
+
   return (
     <div>
       <h2 className="text-3xl font-semibold">Direct Client</h2>
@@ -28,11 +30,11 @@ export default function DirectClient({
           onChange={(e) => setNum2(Number(e.target.value))}
           type="number"
         />
-        <Button onClick={async () => setResult(await addNumbers([num1, num2]))}>
+        <Button onClick={async () => await addNumbersWrapper([+num1, +num2])}>
           Add
         </Button>
       </div>
-      <p className="w-1/4">{result}</p>
+      <p className="w-1/4">{state}</p>
     </div>
   );
 }
