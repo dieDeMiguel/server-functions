@@ -17,6 +17,7 @@
     "next": "rc",
     "react": "rc",
     "react-dom": "rc",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7"
   },
